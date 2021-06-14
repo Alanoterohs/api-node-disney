@@ -1,7 +1,8 @@
--- CREATE TABLE users(
---   name text,
---   email text,
--- )
+CREATE TABLE usuarios(
+name TEXT,
+email TEXT,
+password TEXT,
+);
 --
 -- CREATE TABLE movies(
 --   id SERIAL PRIMARY KEY,

@@ -1,8 +1,19 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
+const UsersModel = require('../models/users');
 
-const sequelize = new Sequelize('postgres', 'postgres', '12345', {
+const sequelize = new Sequelize('disney', 'root', 'password', {
       host: 'localhost',
-      dialect: 'postgres',
+      dialect: 'mysql',
     });
 
-export default sequelize;
+const User = UsersModel(sequelize, Sequelize);
+
+//connection to ddbb
+sequelize.sync({ force: false, })
+  .then(() => {
+    console.log('connection ok');
+  });
+
+module.exports = {
+  User,
+};

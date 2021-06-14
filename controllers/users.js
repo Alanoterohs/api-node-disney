@@ -1,33 +1,36 @@
-import Users from '../models/users';
-const bcrypt = require('bcryptjs');
+const { QueryTypes } = require('sequelize');
+const { User } = require('../database/database');
+//const bcrypt = require('bcryptjs');
 const jwtGenerator = require('../utils/JwtGenerator');
 
-exports.register = async (req, res) => {
-  const { name, mail } = req.body;
+const register = async (req, res) => {
   try {
-    const newUser = await Users.create({
+    const { name, email, password } = req.body;
+    console.log(name);
+    console.log(email);
+    console.log(password);
+    const newUser = await User.create({
       name,
-      mail,
-    }, {
-      fields: ['name', 'mail'],
+      email,
+      password,
     });
-    const token = jwtGenerator(newUser.name);
-    res.json(token);
-
+    await newUser.save();
+    const token = jwtGenerator(name);
+    res.json({ token });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-exports.login = async (req, res) => {
-  const { name, mail } = req.body;
+const login = async (req, res) => {
 
   try {
-    const loginUser = Users.findAll({
-      where: { mail },
+    const { name, email, password } = req.body;
+    const loginUser = await User.findAll({
+      where: { password, email },
     });
-
-    if (!loginUser) {
+    console.log(loginUser);
+    if (loginUser.length === 0) {
       return res.status(400).json({ message: 'User not found' });
     } else {
       const token = jwtGenerator(loginUser);
@@ -40,11 +43,17 @@ exports.login = async (req, res) => {
 
 };
 
-exports.auth = async (req, res) => {
+const auth = async (req, res) => {
   try {
     res.json(true);
   } catch (error) {
     console.log(error.message);
     res.status(500).send('Server error');
   }
+};
+
+module.exports = {
+  register,
+  login,
+  auth,
 };

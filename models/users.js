@@ -1,19 +1,24 @@
 const { Sequelize, DataTypes } = require('sequelize');
-import sequelize from '../database/database';
+const sequelize = require('../database/database');
 
-const Users = sequelize.define('users', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-  },
-  mail: {
-    type: DataTypes.STRING,
-  },
-
-  // asoc_characters: {
-  //   type: DataTypes.
-  // },
-});
+module.exports = (sequelize, Sequelize) => {
+  const UsersModel = sequelize.define('usuarios', {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: Sequelize.STRING,
+    },
+    email: {
+      type: Sequelize.STRING,
+    },
+    password: {
+      type: Sequelize.STRING,
+    },
+  }, {
+    freezeTableName: true,
+  });
+  return UsersModel;
+};
