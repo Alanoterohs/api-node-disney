@@ -1,6 +1,6 @@
-// import Movies from '../models/movies';
-//
-// exports.createMovies = async (req, res) => {
+const { Movies } = require('../database/database');
+
+// const createMovies = async (req, res) => {
 //   const { image, title, creation, qualification } = req.body;
 //   try {
 //     const newMovie = await Movies.create({
@@ -8,20 +8,16 @@
 //       title,
 //       creation,
 //       qualification,
-//     }, {
-//       fields: ['image', 'title', 'creation', 'qualification'],
 //     });
-//     res.json({
-//       data: newMovie,
-//       message: 'new movie created',
-//     });
+//     await newMovie.save();
+//     res.json({ newMovie });
 //
 //   } catch (error) {
 //     console.log(error.message);
 //   }
 // };
-//
-// exports.getMovies = async (req, res) => {
+
+// const getMovies = async (req, res) => {
 //   try {
 //     const movies = await Movies.findAll({
 //       attributes: ['image', 'title', 'creation'],
@@ -32,7 +28,7 @@
 //   }
 // };
 //
-// exports.updateMovies = async (req, res) => {
+// const updateMovies = async (req, res) => {
 //   const { id } = req.params;
 //
 //   try {
@@ -42,7 +38,7 @@
 //   }
 // };
 //
-// exports.deleteMovies = async (req, res) => {
+// const deleteMovies = async (req, res) => {
 //   const { id } = req.params;
 //   try {
 //     const deleteMovie = await Movies.destroy({
@@ -54,3 +50,7 @@
 //     console.log(error.message);
 //   }
 // };
+
+module.exports = {
+  createMovies,
+};

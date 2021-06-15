@@ -1,15 +1,18 @@
-// const { Sequelize, DataTypes } = require('sequelize');
-// import sequelize from '../database/database';
-//
-// const Gender = sequelize.define('gender', {
-//   name: {
-//     type: DataTypes.STRING,
-//   },
-//   image: {
-//     type: DataTypes.BLOB,
-//   },
-//
-//   // asoc_characters: {
-//   //   type: DataTypes.
-//   // },
-// });
+// module.exports = (sequelize, Sequelize) => {
+//   const GendersModel = sequelize.define('usuarios', {
+//     id: {
+//       type: Sequelize.INTEGER,
+//       primaryKey: true,
+//       autoIncrement: true,
+//     },
+//     name: {
+//       type: Sequelize.STRING,
+//     },
+//     image: {
+//       type: Sequelize.BLOB,
+//     },
+//   }, {
+//     freezeTableName: true,
+//   });
+//   return GendersModel;
+// };

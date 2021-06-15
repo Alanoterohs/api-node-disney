@@ -1,24 +1,31 @@
-// const { Sequelize, DataTypes } = require('sequelize');
-// import sequelize from '../database/database';
-//
-// const Characters = sequelize.define('characters', {
-//   image: {
-//     type: DataTypes.BLOB,
-//   },
-//   name: {
-//     type: DataTypes.STRING,
-//   },
-//   age: {
-//     type: DataTypes.DATE,
-//   },
-//   weight: {
-//     type: DataTypes.FLOAT,
-//   },
-//   history: {
-//     type: DataTypes.STRING,
-//   },
-//
-//   // asoc_characters: {
-//   //   type: DataTypes.
-//   // },
-// });
+module.exports = (sequelize, Sequelize) => {
+  const CharactersModel = sequelize.define('character', {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    image: {
+      type: Sequelize.BLOB,
+    },
+    name: {
+      type: Sequelize.STRING,
+    },
+    age: {
+      type: Sequelize.INTEGER,
+    },
+    weight: {
+      type: Sequelize.FLOAT,
+    },
+    history: {
+      type: Sequelize.STRING,
+    },
+    asoc_movie: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+  }, {
+    freezeTableName: true,
+  });
+  return CharactersModel;
+};
