@@ -27,6 +27,21 @@ const { Movies } = require('../database/database');
 //     console.log(error.message);
 //   }
 // };
+
+//Falta devolver char asociado;
+// const detailsMovies = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const detailChar = await Movies.findOne({
+//       where: { id },
+//       attributes: ['image', 'title', 'creation', 'qualification'],
+//     });
+//     res.json({ detailChar });
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
 //
 // const updateMovies = async (req, res) => {
 //   const { id } = req.params;

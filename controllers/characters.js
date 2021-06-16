@@ -1,4 +1,6 @@
 const { Character } = require('../database/database');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const createCharacters = async (req, res) => {
   try {
@@ -56,9 +58,9 @@ const updateCharacter = async (req, res) => {
     });
     const updatedChar = await Character.update(
       { image, name, age, weight, history, asoc_movie },
-      { where: { id }},
+      { where: { id } },
     );
-    res.json({updatedChar});
+    res.json({ message: 'Character updated :D' });
   } catch (error) {
     console.log(error.message);
   }
@@ -77,8 +79,28 @@ const deleteCharacter = async (req, res) => {
   }
 };
 
+const searchCharacter = async (req, res) => {
+  try {
+    const { name, age, weight, asoc_movie, } = req.query;
+
+    // es un filtro OR, los parametros si o si deben estar en la ruta
+    const searchChar = await Character.findAll({
+      where: {
+        [Op.or]: [{ name }, { age }, { weight }, { asoc_movie }],
+      },
+    });
+    res.json({ searchChar });
+
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   listCharacters,
   createCharacters,
   detailsCharacters,
+  updateCharacter,
+  deleteCharacter,
+  searchCharacter,
 };
