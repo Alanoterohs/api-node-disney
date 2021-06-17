@@ -17,6 +17,9 @@ module.exports = (sequelize, Sequelize) => {
     qualification: {
       type: Sequelize.INTEGER,
     },
+    gender: {
+      type: Sequelize.STRING,
+    },
   }, {
     freezeTableName: true,
   });
