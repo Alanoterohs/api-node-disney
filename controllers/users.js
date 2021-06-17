@@ -2,6 +2,7 @@ const { QueryTypes } = require('sequelize');
 const { User } = require('../database/database');
 //const bcrypt = require('bcryptjs');
 const jwtGenerator = require('../utils/JwtGenerator');
+const { sendEmail } = require('../utils/sendMail');
 
 const register = async (req, res) => {
   try {
@@ -14,6 +15,7 @@ const register = async (req, res) => {
       email,
       password,
     });
+    sendEmail(name, email);
     await newUser.save();
     const token = jwtGenerator(name);
     res.json({ token });

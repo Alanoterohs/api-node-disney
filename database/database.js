@@ -8,9 +8,10 @@ const sequelize = new Sequelize('disney', 'root', 'password', {
       dialect: 'mysql',
     });
 
-//const User = UsersModel(sequelize, Sequelize);
+const User = UsersModel(sequelize, Sequelize);
 const Movies = MoviesModel(sequelize, Sequelize);
 const Character = CharactersModel(sequelize, Sequelize);
+const apiKey = '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';
 
 //connection to ddbb
 sequelize.sync({ force: false, })
@@ -22,7 +23,8 @@ sequelize.sync({ force: false, })
 // Character.belongsTo(Movies, {foreinkey: , targetId:});
 
 module.exports = {
-  //User,
+  User,
   Movies,
   Character,
+  apiKey,
 };
