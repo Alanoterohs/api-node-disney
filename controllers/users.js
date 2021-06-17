@@ -1,20 +1,26 @@
 const { QueryTypes } = require('sequelize');
 const { User } = require('../database/database');
-//const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const jwtGenerator = require('../utils/JwtGenerator');
 const { sendEmail } = require('../utils/sendMail');
 
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    console.log(name);
-    console.log(email);
-    console.log(password);
     const newUser = await User.create({
       name,
       email,
       password,
     });
+
+    //Hash the password
+    const salt = 10;
+    const passwordEncrypted = await bcrypt.hash(password, salt);
+
+    //paso la psw encriptada a la contraseña del nuevo usuario
+    newUser.password = passwordEncrypted;
+
+    //send email to enrolled
     sendEmail(name, email);
     await newUser.save();
     const token = jwtGenerator(name);
@@ -31,7 +37,6 @@ const login = async (req, res) => {
     const loginUser = await User.findAll({
       where: { password, email },
     });
-    console.log(loginUser);
     if (loginUser.length === 0) {
       return res.status(400).json({ message: 'User not found' });
     } else {
