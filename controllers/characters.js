@@ -1,4 +1,4 @@
-const { Character } = require('../database/database');
+const { Character, Movies } = require('../database/database');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -15,10 +15,11 @@ const createCharacters = async (req, res) => {
       asoc_movie,
     });
     await newChar.save();
-    res.json({ newChar });
+    res.status(201).json({ newChar });
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -28,9 +29,10 @@ const listCharacters = async (req, res) => {
     const getChar = await Character.findAll({
       attributes: ['image', 'name'],
     });
-    res.json({ getChar });
+    res.status(200).json({ getChar });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -42,9 +44,19 @@ const detailsCharacters = async (req, res) => {
       where: { id },
       attributes: ['image', 'name', 'age', 'weight', 'history', 'asoc_movie'],
     });
-    res.json({ detailChar });
+    const nameMovie = detailChar.dataValues.asoc_movie;
+    console.log(nameChar);
+    const movieAssociated = await Movies.findAll({
+      where: {
+        title: nameMovie,
+      },
+      atributes: ['image', 'title', 'creation'],
+    });
+
+    res.status(200).json({ detailChar, nameMovie });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -60,9 +72,10 @@ const updateCharacter = async (req, res) => {
       { image, name, age, weight, history, asoc_movie },
       { where: { id } },
     );
-    res.json({ message: 'Character updated :D' });
+    res.status(201).json({ message: 'Character updated :D' });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -72,10 +85,11 @@ const deleteCharacter = async (req, res) => {
     const deletedChar = await Character.destroy({
       where: { id },
     });
-    res.json({ message: 'Character deleted D:' })
+    res.status(200).json({ message: 'Character deleted D:' });
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -89,10 +103,11 @@ const searchCharacter = async (req, res) => {
         [Op.or]: [{ name }, { age }, { weight }, { asoc_movie }],
       },
     });
-    res.json({ searchChar });
+    res.status(200).json({ searchChar });
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 

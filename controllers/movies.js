@@ -13,10 +13,11 @@ const createMovies = async (req, res) => {
       gender,
     });
     await newMovie.save();
-    res.json({ newMovie });
+    res.status(200).json({ newMovie });
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -25,9 +26,10 @@ const getMovies = async (req, res) => {
     const movies = await Movies.findAll({
       attributes: ['image', 'title', 'creation'],
     });
-    res.json({ movies });
+    res.status(200).json({ movies });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -36,11 +38,11 @@ const detailsMovies = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const detailChar = await Movies.findOne({
+    const detailMovie = await Movies.findOne({
       where: { id },
       attributes: ['image', 'title', 'creation', 'qualification'],
     });
-    const nameChar = detailChar.dataValues.title;
+    const nameChar = detailMovie.dataValues.title;
 
     const charactersAssociated = await Character.findAll({
         where: {
@@ -48,29 +50,31 @@ const detailsMovies = async (req, res) => {
         },
         attributes: ['image', 'name', 'age', 'weight', 'history', 'asoc_movie'],
       });
-    res.json({ detailChar, charactersAssociated });
+    res.status(200).json({ detailMovie, charactersAssociated });
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
 const updateMovies = async (req, res) => {
   try {
     const { id } = req.params;
-    const { image, title, creation, qualification }  = req.body;
+    const { image, title, creation, qualification, gender }  = req.body;
     const char = await Movies.findOne({
       where: { id },
-      attributes: ['image', 'title', 'creation', 'qualification'],
+      attributes: ['image', 'title', 'creation', 'qualification', 'gender'],
     });
     const updatedChar = await Movies.update(
-      { image, title, creation, qualification },
+      { image, title, creation, qualification, gender },
       { where: { id } },
     );
-    res.json({ message: 'movie updated' });
+    res.status(200).json({ message: 'movie updated' });
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -80,10 +84,11 @@ const deleteMovies = async (req, res) => {
     const deleteMovie = await Movies.destroy({
       where: { id },
     });
-    res.json({ message: 'movie deleted' });
+    res.status(200).json({ message: 'movie deleted' });
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -97,10 +102,10 @@ const searchMovie = async (req, res) => {
       },
       order: [['creation', order]],
     });
-    res.json({ filter });
+    res.status(200).json({ filter });
 
   } catch (error) {
-    console.log(error.message);
+    res.status(500).send('Server error');
   }
 };
 
