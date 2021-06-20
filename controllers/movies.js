@@ -33,7 +33,6 @@ const getMovies = async (req, res) => {
   }
 };
 
-//Falta devolver char asociado;
 const detailsMovies = async (req, res) => {
   try {
     const { id } = req.params;

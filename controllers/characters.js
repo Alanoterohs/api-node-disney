@@ -5,7 +5,6 @@ const Op = Sequelize.Op;
 const createCharacters = async (req, res) => {
   try {
     const { image, name, age, weight, history, asoc_movie, } = req.body;
-    console.log(req.body);
     const newChar = await Character.create({
       image,
       name,
@@ -23,7 +22,6 @@ const createCharacters = async (req, res) => {
   }
 };
 
-//point 3
 const listCharacters = async (req, res) => {
   try {
     const getChar = await Character.findAll({
@@ -36,7 +34,6 @@ const listCharacters = async (req, res) => {
   }
 };
 
-// point 5
 const detailsCharacters = async (req, res) => {
   try {
     const { id } = req.params;
@@ -45,15 +42,13 @@ const detailsCharacters = async (req, res) => {
       attributes: ['image', 'name', 'age', 'weight', 'history', 'asoc_movie'],
     });
     const nameMovie = detailChar.dataValues.asoc_movie;
-    console.log(nameChar);
     const movieAssociated = await Movies.findAll({
       where: {
         title: nameMovie,
       },
       atributes: ['image', 'title', 'creation'],
     });
-
-    res.status(200).json({ detailChar, nameMovie });
+    res.status(200).json({ detailChar });
   } catch (error) {
     console.log(error.message);
     res.status(500).send('Server error');
@@ -104,7 +99,6 @@ const searchCharacter = async (req, res) => {
       },
     });
     res.status(200).json({ searchChar });
-
   } catch (error) {
     console.log(error.message);
     res.status(500).send('Server error');

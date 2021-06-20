@@ -1,4 +1,3 @@
-const { QueryTypes } = require('sequelize');
 const { User } = require('../database/database');
 const bcrypt = require('bcryptjs');
 const jwtGenerator = require('../utils/JwtGenerator');
@@ -27,13 +26,12 @@ const register = async (req, res) => {
     const passwordEncrypted = await bcrypt.hash(password, salt);
     newUser.password = passwordEncrypted;
 
-
     await newUser.save();
 
     //send email to enrolled
     sendEmail(name, email);
     const token = jwtGenerator(name);
-    res.json(token);
+    res.status(200).json(token);
   } catch (error) {
     console.log(error.message);
     res.status(500).send('Server error');
@@ -53,7 +51,7 @@ const login = async (req, res) => {
 
     //comparePassword devuelve true o false
     const comparePassword = await bcrypt.compare(password, loginUser.password);
-    if (email === loginUser.email && password) {
+    if (email === loginUser.email && comparePassword) {
       const token = jwtGenerator(loginUser);
       res.status(200).json(token);
     } else {
@@ -66,14 +64,18 @@ const login = async (req, res) => {
   }
 };
 
-const auth = async (req, res) => {
-  try {
-    res.json(true);
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).send('Server error');
-  }
-};
+const auth = (req, res, next) => {
+    const bearer = req.headers['authorization'];
+
+    if (bearer !== undefined) {
+      const bearerSplit = bearer.split(' ');
+      const token = bearerSplit[1];
+      req.token = token;
+      next();
+    } else {
+      res.status(403).send('Not authorizated');
+    }
+  };
 
 module.exports = {
   register,

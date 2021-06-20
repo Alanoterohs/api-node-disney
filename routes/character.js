@@ -1,5 +1,6 @@
 const Router = require('express-promise-router');
 const router = new Router();
+const { auth } = require('../controllers/users');
 const { createCharacters,
   listCharacters,
   detailsCharacters,
@@ -7,11 +8,11 @@ const { createCharacters,
   updateCharacter,
   deleteCharacter, } = require('../controllers/characters');
 
-router.post('/', createCharacters);
-router.get('/', listCharacters);
-router.get('/details/:id', detailsCharacters);
+router.post('/', auth, createCharacters);
+router.get('/', auth, listCharacters);
+router.get('/details/:id', auth, detailsCharacters);
 router.get('/search', searchCharacter);
-router.put('/:id', updateCharacter);
-router.delete('/:id', deleteCharacter);
+router.put('/:id', auth, updateCharacter);
+router.delete('/:id', auth, deleteCharacter);
 
 module.exports = router;

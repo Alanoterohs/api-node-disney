@@ -1,25 +1,20 @@
-const Users = require('../models/users');
 const jwt = require('jsonwebtoken');
 
-module.exports = async function (req, res, next) {
-  // Get token from header
-  const token = req.header('jwt_token');
-  //console.log(`TOKEN: ${token}`);
-
-  // Check if not token
-  if (!token) {
-    return res.status(403).json({ msg: 'authorization denied' });
-  }
-
-  // Verify token
-  try {
-    const { name } = jwt.verify(token, 'secret_key');
-    //The findByPk method obtains only a single entry from the table, using the provided primary key.
-    const verifyUser = await Users.findByPk(name);
-    req.user = verifyUser;
-
+module.exports = async (req, res, next) => {
+  const bearer = req.headers['authorization'];
+  if (bearer !== undefined) {
+    const bearerSplit = bearer.split(' ');
+    const token = bearerSplit[1];
+    req.token = token;
+    jwt.verify(req.token, 'secretkey', (error) => {
+      if (!error) {
+        res.status(200).send('satisfactory login');
+      } else {
+        res.status(403).send('Not authorized');
+        next();
+      }
+    });
+  } else {
     next();
-  } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
   }
 };

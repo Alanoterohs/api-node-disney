@@ -1,5 +1,6 @@
 const Router = require('express-promise-router');
 const router = new Router();
+const { auth } = require('../controllers/users');
 const {
   createMovies,
   getMovies,
@@ -9,11 +10,11 @@ const {
   deleteMovies,
  } = require('../controllers/movies');
 
-router.post('/', createMovies);
-router.get('/', getMovies);
-router.get('/details/:id', detailsMovies);
-router.get('/search', searchMovie);
-router.put('/:id', updateMovies);
-router.delete('/:id', deleteMovies);
+router.post('/', auth, createMovies);
+router.get('/', auth, getMovies);
+router.get('/details/:id', auth, detailsMovies);
+router.get('/search', auth, searchMovie);
+router.put('/:id', auth, updateMovies);
+router.delete('/:id', auth, deleteMovies);
 
 module.exports = router;
